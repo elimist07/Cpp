@@ -1,8 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <algorithm>
-#include <fstream> //for file operations
+#include <algorithm> //for sort function
+#include <fstream>   //for file operations
+#include <cctype>
 using namespace std;
 void count(const std::string);
 void frequency(const std::string);
@@ -26,21 +27,23 @@ void count(const std::string user_file)
         cerr << "Error:Cannot open file" << endl;
         return;
     }
-    long int ch, White_Space = 1, words = 0, lines = 0, characters = 0;
+    int ch;
+    bool white_space = false;
+    long int words = 0, lines = 0, characters = 0;
 
     while ((ch = myfile.get()) != EOF)
     {
         characters++;
         if (static_cast<char>(ch) == '\n')
             lines++;
-        if (White_Space && !isspace(ch))
+        if (std::isspace(static_cast<unsigned char>(ch)))
         {
-            White_Space = 0;
-            words++;
+            white_space = false;
         }
-        else if (!White_Space && isspace(ch))
+        else if (!white_space)
         {
-            White_Space = 1;
+            white_space = true;
+            words++;
         }
     }
     std::cout << "No of words= " << words << std::endl
@@ -54,12 +57,25 @@ void frequency(const std::string user_file)
     std::fstream file;
     file.open(user_file.c_str());
     if (!file.is_open())
+    {
         return;
+    }
     std::unordered_map<std::string, int> frequency;
     std::string word;
     while (file >> word)
     {
+        std::transform(word.begin(), word.end(), word.begin(), [](unsigned char c)
+                       { return std::tolower(c) ;});//converts to lower case
         frequency[word]++;
+    }
+    std::vector<std::pair<std::string, int>> ranked(frequency.begin(), frequency.end()); // copies all key-pair value of ordered map into ranked pair vector
+    std::sort(ranked.begin(), ranked.end(), [](const auto &a, const auto &b)
+              { return a.second > b.second; }); // sorts in descending order
+
+    std::cout << "Top 3 Frequent Words\n";
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout << ranked[i].first << " : " << ranked[i].second << " times" << std::endl;
     }
     file.close();
 }
