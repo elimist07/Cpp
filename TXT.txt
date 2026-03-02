@@ -1,4 +1,1 @@
-HELLO HI
-NEW LINE
-PRINT?
-PROPER FORMAAT????
+hello hello hello hi hi bye
