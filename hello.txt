@@ -1,0 +1,3 @@
+kitty	67
+maria	45
+lana	78

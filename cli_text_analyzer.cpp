@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     if (argc != 2)
     {
-        std::cout << "Invalid syntax!\nType help for more" << std::endl;
+        std::cout << "Invalid syntax!" << std::endl;
         return 0;
     }
     const std::string user_file = argv[1];
@@ -54,28 +54,35 @@ void count(const std::string user_file)
 }
 void frequency(const std::string user_file)
 {
-    std::fstream file;
-    file.open(user_file.c_str());
+    std::ifstream file(user_file,std::ios::in);
     if (!file.is_open())
     {
         return;
     }
+
     std::unordered_map<std::string, int> frequency;
     std::string word;
+
     while (file >> word)
     {
         std::transform(word.begin(), word.end(), word.begin(), [](unsigned char c)
                        { return std::tolower(c) ;});//converts to lower case
         frequency[word]++;
     }
+
+
     std::vector<std::pair<std::string, int>> ranked(frequency.begin(), frequency.end()); // copies all key-pair value of ordered map into ranked pair vector
     std::sort(ranked.begin(), ranked.end(), [](const auto &a, const auto &b)
               { return a.second > b.second; }); // sorts in descending order
+
+
 
     std::cout << "Top 3 Frequent Words\n";
     for (int i = 0; i < 3; i++)
     {
         std::cout << ranked[i].first << " : " << ranked[i].second << " times" << std::endl;
     }
+
+    
     file.close();
 }
