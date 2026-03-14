@@ -23,7 +23,7 @@ public:
         int *array = new int[capacity];
     }
     // inserts element to last position
-    void insert(int element)
+    void push_back(int element)
     {
 
         if (array_size == capacity)
@@ -31,6 +31,25 @@ public:
 
         array[array_size] = element;
         array_size++;
+    }
+
+    void insert(int position, int element)
+    {
+        if (position > array_size || position < 0)
+        {
+            std::cout << "Error: Position out of bound" << std::endl;
+            return;
+        }
+        array_size += 1;
+        if (array_size == capacity)
+            size_increase();
+        for (int i = array_size - 1; i >= position; --i)
+        {
+            array[i + 1] = array[i];
+            if (i == position)
+                break;
+        }
+        array[position] = element;
     }
 
     void size_increase()
@@ -90,22 +109,29 @@ public:
     {
         return capacity;
     }
-    //calls deconstructor,its needed to free dyanmically allocated memory above
-    ~DynamicArray(){
-
+    // calls deconstructor,its needed to free dyanmically allocated memory above
+    ~DynamicArray()
+    {
     }
 };
 int main()
 {
     DynamicArray arr;
-    arr.insert(5);
-    arr.insert(6);
-    arr.insert(8);
-    arr.insert(10);
+    arr.push_back(5);
+    arr.push_back(6);
+    arr.push_back(8);
+    arr.push_back(10);
     arr.pop();
     arr.show();
-    cout << "array size="<<arr.getsize()<<endl;
-    cout << "capacity="<<arr.getcapacity()<<endl;
-    cout << arr.isempty()<<endl;
+    cout << "array size=" << arr.getsize() << endl;
+    cout << "capacity=" << arr.getcapacity() << endl;
+    // cout << arr.isempty() << endl;
+    arr.insert(0, 101);
+    arr.insert(1, 102);
+    arr.insert(2, 103);
+    arr.insert(3, 104);
+    arr.insert(4, 105);
+    arr.show();
+    cout << "Capacity is" << arr.getcapacity();
     return 0;
 }
