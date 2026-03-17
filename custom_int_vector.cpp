@@ -52,6 +52,23 @@ public:
         array[position] = element;
     }
 
+    void del(int position)
+    {
+        if (position > array_size || position < 0)
+        {
+            std::cout << "Error: Position out of bound" << std::endl;
+            return;
+        }
+        if (array_size == capacity)
+            size_decrease();
+        for (int i = position; i <= array_size - 1; ++i)
+        {
+            auto temp=array[i];
+            array[i ] = array[i+1];
+            array[i+1]=temp;
+        }
+        array_size -= 1;
+    }
     void size_increase()
     {
         int *temp_array = new int[capacity * 2];
@@ -71,7 +88,7 @@ public:
     {
         array[array_size - 1] = 0;
         array_size--;
-        if (array_size == capacity / 2)
+        if (array_size == capacity )
             size_decrease();
     }
 
@@ -131,6 +148,7 @@ int main()
     arr.insert(2, 103);
     arr.insert(3, 104);
     arr.insert(4, 105);
+    arr.del(0);
     arr.show();
     cout << "Capacity is" << arr.getcapacity();
     return 0;
